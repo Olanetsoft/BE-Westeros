@@ -61,8 +61,8 @@ const userSchema = new Schema(
       type: String,
     },
     point: {
-      type: Number,
-      default: 0,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "LeaderBoard",
     },
   },
   {
@@ -71,7 +71,7 @@ const userSchema = new Schema(
 );
 
 userSchema.pre("save", function (next) {
-  if (this.isModified("password")) {
+  if (!this.isModified("password")) {
     return next(null);
   }
   bcrypt.hash(this.password, 10, (err, passwordHash) => {
